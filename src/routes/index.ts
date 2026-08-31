@@ -4,6 +4,7 @@ import { clinicRouter } from "./clinic.routes";
 import { medicineRouter } from "./medicine.routes";
 import { userRouter } from "./user.routes";
 import { warehouseRouter } from "./warehouse.routes";
+import { requestRouter } from "./request.routes";
 
 export const apiRouter = Router();
 
@@ -16,4 +17,4 @@ apiRouter.use("/users", userRouter);
 apiRouter.use("/clinics", clinicRouter);
 apiRouter.use("/warehouses", warehouseRouter);
 apiRouter.use("/medicines", medicineRouter);
-
+apiRouter.use("/requests", requestRouter);
