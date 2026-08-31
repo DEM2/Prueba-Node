@@ -1,35 +1,35 @@
 # RiwiMediCare Plus API
 
-API REST desarrollada para gestionar solicitudes de abastecimiento de medicamentos e insumos médicos entre clínicas y almacenes.
+REST API developed to manage medication and medical supply requests between clinics and warehouses.
 
-El sistema permite administrar clínicas, medicamentos, almacenes y solicitudes de abastecimiento, aplicando autenticación mediante JWT, control de acceso por roles y validaciones de negocio.
-
----
-
-## Justificación
-
-RiwiMediCare Plus requiere centralizar y automatizar el proceso de solicitudes de abastecimiento realizadas por sus clínicas y centros de atención.
-
-Anteriormente, este proceso se realizaba mediante correos electrónicos y hojas de cálculo, lo que podía ocasionar pérdida de información, errores de inventario, retrasos en la aprobación de solicitudes y poca trazabilidad.
-
-Por esta razón se desarrolló una API REST que permite gestionar de manera estructurada:
-
-- Usuarios y autenticación.
-- Clínicas.
-- Almacenes.
-- Medicamentos.
-- Inventario disponible.
-- Solicitudes de abastecimiento.
-- Estados de las solicitudes.
-- Historial de solicitudes.
-
-La aplicación busca garantizar la integridad de la información mediante validaciones de negocio, autenticación JWT, autorización por roles y persistencia de datos utilizando PostgreSQL.
+The system allows the management of clinics, medications, warehouses, and supply requests, applying JWT authentication, role-based access control, and business validations.
 
 ---
 
-# Tecnologías utilizadas
+## Justification
 
-El proyecto fue desarrollado utilizando:
+RiwiMediCare Plus needs to centralize and automate the supply request process carried out by its clinics and care centers.
+
+Previously, this process was handled through emails and spreadsheets, which could lead to information loss, inventory errors, delays in request approvals, and poor traceability.
+
+For this reason, a REST API was developed to manage the following in a structured way:
+
+- Users and authentication.
+- Clinics.
+- Warehouses.
+- Medications.
+- Available inventory.
+- Supply requests.
+- Request statuses.
+- Request history.
+
+The application aims to ensure data integrity through business validations, JWT authentication, role-based authorization, and data persistence using PostgreSQL.
+
+---
+
+# Technologies Used
+
+The project was developed using:
 
 - Node.js
 - TypeScript
@@ -38,7 +38,7 @@ El proyecto fue desarrollado utilizando:
 - Sequelize ORM
 - JSON Web Token (JWT)
 - bcryptjs
-- Swagger 
+- Swagger
 - Docker
 - Docker Compose
 - Git
@@ -46,14 +46,14 @@ El proyecto fue desarrollado utilizando:
 
 ---
 
-# Arquitectura del proyecto
+# Project Architecture
 
-El backend está organizado utilizando una arquitectura por capas con separación de responsabilidades.
+The backend is organized using a layered architecture with separation of responsibilities.
 
-El flujo general de una petición es:
+The general flow of a request is:
 
 ```text
-Cliente
+Client
    ↓
 Routes
    ↓
@@ -72,11 +72,11 @@ Sequelize
 PostgreSQL
 ```
 
-Esta separación permite mantener el código organizado, facilitar su mantenimiento y evitar que responsabilidades diferentes se mezclen dentro de un mismo archivo.
+This separation keeps the code organized, makes maintenance easier, and prevents different responsibilities from being mixed within the same file.
 
 ---
 
-## Estructura de carpetas
+## Folder Structure
 
 ```text
 src/
@@ -139,15 +139,15 @@ src/
 
 ---
 
-# ¿Qué hace cada capa?
+# What Does Each Layer Do?
 
 ### Routes
 
-Definen los endpoints disponibles en la API.
+They define the endpoints available in the API.
 
-También indican qué middlewares deben ejecutarse antes de llegar al controlador.
+They also indicate which middlewares must run before reaching the controller.
 
-Ejemplo:
+Example:
 
 ```text
 POST /api/auth/login
@@ -159,54 +159,54 @@ POST /api/requests
 
 ### Middlewares
 
-Interceptan las peticiones antes de que lleguen al controlador.
+They intercept requests before they reach the controller.
 
-Son utilizados principalmente para:
+They are mainly used to:
 
-- Validar JWT.
-- Verificar autenticación.
-- Verificar roles.
-- Manejar errores.
-- Proteger recursos.
+- Validate JWTs.
+- Verify authentication.
+- Verify roles.
+- Handle errors.
+- Protect resources.
 
 ---
 
 ### Controllers
 
-Los controladores manejan la comunicación HTTP.
+Controllers handle HTTP communication.
 
-Sus principales responsabilidades son:
+Their main responsibilities are:
 
-- Obtener información de `req`.
-- Llamar al servicio correspondiente.
-- Devolver la respuesta HTTP.
-- Definir el código de estado correspondiente.
+- Retrieve information from `req`.
+- Call the corresponding service.
+- Return the HTTP response.
+- Define the corresponding status code.
 
-Los controladores no contienen directamente consultas a la base de datos.
+Controllers do not directly contain database queries.
 
 ---
 
 ### Services
 
-Contienen la lógica de negocio de la aplicación.
+They contain the application's business logic.
 
-Por ejemplo:
+For example:
 
-- Verificar que una clínica exista.
-- Validar la disponibilidad de medicamentos.
-- Evitar cantidades menores o iguales a cero.
-- Validar los estados de una solicitud.
-- Evitar clínicas duplicadas mediante su NIT.
+- Verify that a clinic exists.
+- Validate medication availability.
+- Prevent quantities less than or equal to zero.
+- Validate request statuses.
+- Prevent duplicate clinics based on their NIT.
 
-Esta capa comunica los controllers con los repositories.
+This layer connects the controllers with the repositories.
 
 ---
 
 ### Repositories
 
-Son responsables del acceso a la base de datos.
+They are responsible for database access.
 
-Aquí se realizan operaciones mediante Sequelize como:
+Operations are performed here through Sequelize, such as:
 
 ```text
 findAll
@@ -217,127 +217,127 @@ update
 destroy
 ```
 
-Esto permite mantener las consultas de base de datos separadas de la lógica de negocio.
+This keeps database queries separate from business logic.
 
 ---
 
 ### Models
 
-Representan las tablas de PostgreSQL mediante Sequelize.
+They represent PostgreSQL tables through Sequelize.
 
-Aquí se definen:
+They define:
 
-- Columnas.
-- Tipos de datos.
-- Llaves primarias.
-- Llaves foráneas.
-- Relaciones.
-- Restricciones.
+- Columns.
+- Data types.
+- Primary keys.
+- Foreign keys.
+- Relationships.
+- Constraints.
 
 ---
 
 ### DTOs
 
-Los DTOs (Data Transfer Objects) definen la estructura de los datos que entran o salen de determinadas operaciones.
+DTOs (Data Transfer Objects) define the structure of the data that enters or leaves certain operations.
 
-Permiten controlar qué información recibe la aplicación y qué información se devuelve al cliente.
+They help control what information the application receives and what information is returned to the client.
 
-Por ejemplo, una respuesta de usuario no debe exponer su contraseña.
+For example, a user response must not expose the user's password.
 
 ---
 
-# Autenticación y autorización
+# Authentication and Authorization
 
-La aplicación utiliza JSON Web Token (JWT).
+The application uses JSON Web Token (JWT).
 
-El flujo de autenticación es:
+The authentication flow is:
 
 ```text
-Usuario
+User
    ↓
 Login
    ↓
-Validación de credenciales
+Credential validation
    ↓
-Generación del JWT
+JWT generation
    ↓
-Cliente recibe token
+Client receives token
    ↓
 Authorization: Bearer TOKEN
    ↓
-Middleware de autenticación
+Authentication middleware
    ↓
-Acceso al endpoint
+Endpoint access
 ```
 
-Existen dos roles:
+There are two roles:
 
 ### ADMIN
 
-El administrador puede gestionar los recursos administrativos de la aplicación, incluyendo:
+The administrator can manage the application's administrative resources, including:
 
-- Clínicas.
-- Almacenes.
-- Medicamentos.
-- Solicitudes.
+- Clinics.
+- Warehouses.
+- Medications.
+- Requests.
 
-### USER / Gestor de Solicitudes
+### USER / Request Manager
 
-El gestor puede trabajar con las funcionalidades relacionadas con solicitudes de abastecimiento según los permisos definidos en las rutas.
+The manager can work with features related to supply requests according to the permissions defined in the routes.
 
-Las rutas protegidas requieren un JWT válido.
-
----
-
-# Reglas de negocio
-
-La aplicación implementa validaciones para proteger la integridad de la información.
-
-Entre las principales reglas se encuentran:
-
-- Una clínica debe existir antes de utilizarse en una solicitud.
-- Un medicamento debe existir.
-- No se pueden registrar dos clínicas con el mismo NIT.
-- La cantidad solicitada debe ser mayor a cero.
-- El almacén debe tener inventario suficiente.
-- Una solicitud solamente puede utilizar estados permitidos.
-- Los endpoints protegidos requieren autenticación.
-- Los endpoints administrativos requieren el rol correspondiente.
+Protected routes require a valid JWT.
 
 ---
 
-# Instalación
+# Business Rules
 
-## Requisitos
+The application implements validations to protect data integrity.
 
-Para ejecutar el proyecto localmente se necesita:
+The main rules include:
 
-- Node.js 18 o superior.
+- A clinic must exist before it can be used in a request.
+- A medication must exist.
+- Two clinics cannot be registered with the same NIT.
+- The requested quantity must be greater than zero.
+- The warehouse must have sufficient inventory.
+- A request can only use allowed statuses.
+- Protected endpoints require authentication.
+- Administrative endpoints require the corresponding role.
+
+---
+
+# Installation
+
+## Requirements
+
+To run the project locally, you need:
+
+- Node.js 18 or higher.
 - npm.
 - PostgreSQL.
 
-Opcionalmente:
+Optionally:
 
 - Docker.
 - Docker Compose.
 
 ---
 
-## 1. Clonar el repositorio
+## 1. Clone the Repository
 
 ```bash
-git clone [URL_DEL_REPOSITORIO]
+git clone [REPOSITORY_URL]
 ```
 
-Entrar al proyecto:
+Enter the project directory:
 
 ```bash
-cd [NOMBRE_DEL_PROYECTO]
+cd [PROJECT_NAME]
 ```
 
 ---
 
-## 2. Instalar dependencias
+## 2. Install Dependencies
 
 ```bash
 npm install
@@ -345,25 +345,25 @@ npm install
 
 ---
 
-# Variables de entorno
+# Environment Variables
 
-El proyecto utiliza variables de entorno para almacenar la configuración de la aplicación y las credenciales de conexión.
+The project uses environment variables to store application configuration and connection credentials.
 
-Existe un archivo:
+There is a file:
 
 ```text
 .env.example
 ```
 
-que sirve como referencia.
+that serves as a reference.
 
-Crear:
+Create:
 
 ```text
 .env
 ```
 
-Ejemplo:
+Example:
 
 ```env
 PORT=3000
@@ -378,19 +378,19 @@ JWT_SECRET=super_secret_key
 JWT_EXPIRES_IN=1d
 ```
 
-> Las credenciales reales no deben almacenarse en Git. El archivo `.env` debe permanecer dentro de `.gitignore`.
+> Real credentials must not be stored in Git. The `.env` file must remain inside `.gitignore`.
 
 ---
 
-# Ejecución en desarrollo
+# Development Mode
 
-Después de instalar las dependencias y configurar `.env`:
+After installing the dependencies and configuring `.env`:
 
 ```bash
 npm run dev
 ```
 
-La API estará disponible por defecto en:
+The API will be available by default at:
 
 ```text
 http://localhost:3000
@@ -398,17 +398,17 @@ http://localhost:3000
 
 ---
 
-# Compilar TypeScript
+# Compile TypeScript
 
-Para comprobar que el proyecto compile correctamente:
+To verify that the project compiles correctly:
 
 ```bash
 npm run build
 ```
 
-Esto genera la versión JavaScript compilada del proyecto.
+This generates the compiled JavaScript version of the project.
 
-Para ejecutar la versión compilada:
+To run the compiled version:
 
 ```bash
 npm start
@@ -416,16 +416,16 @@ npm start
 
 ---
 
-# Ejecución con Docker
+# Running with Docker
 
-El proyecto también incluye:
+The project also includes:
 
 ```text
 Dockerfile
 docker-compose.yml
 ```
 
-Docker Compose levanta:
+Docker Compose starts:
 
 ```text
 ┌───────────────────┐
@@ -434,7 +434,7 @@ Docker Compose levanta:
 │      :3000        │
 └─────────┬─────────┘
           │
-          │ Red Docker
+          │ Docker Network
           ↓
 ┌───────────────────┐
 │    PostgreSQL     │
@@ -442,31 +442,31 @@ Docker Compose levanta:
 └───────────────────┘
 ```
 
-Para construir e iniciar los contenedores:
+To build and start the containers:
 
 ```bash
 docker compose up -d --build
 ```
 
-Comprobar el estado:
+Check the status:
 
 ```bash
 docker compose ps
 ```
 
-Ver los logs:
+View the logs:
 
 ```bash
 docker compose logs -f
 ```
 
-Detener los contenedores:
+Stop the containers:
 
 ```bash
 docker compose down
 ```
 
-Para eliminar también los volúmenes:
+To also remove the volumes:
 
 ```bash
 docker compose down -v
@@ -476,108 +476,108 @@ docker compose down -v
 
 # Seeders
 
-El proyecto incluye seeders para cargar información inicial necesaria para realizar pruebas.
+The project includes seeders to load the initial information required for testing.
 
-El archivo principal se encuentra en:
+The main file is located at:
 
 ```text
 src/database/seeders/seed.ts
 ```
 
-Para ejecutar el seeder:
+To run the seeder:
 
 ```bash
 npm run seed
 ```
 
-Los seeders permiten cargar información inicial como usuarios y demás datos requeridos para probar la aplicación.
+The seeders allow initial information such as users and other data required to test the application to be loaded.
 
-> Si la implementación incluye el endpoint de carga JSON mediante Multer solicitado por el enunciado, documentar aquí también la ruta, el nombre del campo `multipart/form-data` y un ejemplo de ejecución.
+> If the implementation includes the JSON upload endpoint using Multer requested by the assignment, also document the route, the `multipart/form-data` field name, and an execution example here.
 
 ---
 
 # Swagger
 
-La documentación de los endpoints se encuentra disponible mediante Swagger UI.
+Endpoint documentation is available through Swagger UI.
 
-Con la aplicación ejecutándose:
+With the application running:
 
 ```text
 http://localhost:3000/api/docs
 ```
 
-Desde Swagger se pueden consultar:
+From Swagger, you can view:
 
-- Métodos HTTP.
-- Rutas.
-- Parámetros.
+- HTTP methods.
+- Routes.
+- Parameters.
 - Request Body.
-- Respuestas.
-- Códigos HTTP.
-- Endpoints protegidos.
-- Esquemas utilizados por la API.
+- Responses.
+- HTTP status codes.
+- Protected endpoints.
+- Schemas used by the API.
 
-Para probar rutas protegidas se debe iniciar sesión, copiar el JWT generado y utilizar la opción **Authorize** de Swagger.
+To test protected routes, log in, copy the generated JWT, and use Swagger's **Authorize** option.
 
 ---
 
-# Flujo para probar la API
+# API Testing Flow
 
-Primero iniciar la aplicación:
+First, start the application:
 
 ```bash
 docker compose up -d --build
 ```
 
-o:
+or:
 
 ```bash
 npm run dev
 ```
 
-Después:
+Then:
 
 ```text
-1. Abrir Swagger.
+1. Open Swagger.
         ↓
-2. Registrar un usuario.
+2. Register a user.
         ↓
-3. Iniciar sesión.
+3. Log in.
         ↓
-4. Obtener el JWT.
+4. Get the JWT.
         ↓
-5. Presionar "Authorize".
+5. Click "Authorize".
         ↓
-6. Introducir el token.
+6. Enter the token.
         ↓
-7. Probar los endpoints protegidos.
+7. Test the protected endpoints.
 ```
 
 ---
 
-# Pruebas
+# Tests
 
-Para ejecutar las pruebas unitarias:
+To run the unit tests:
 
 ```bash
 npm test
 ```
 
-Para generar el reporte de cobertura:
+To generate the coverage report:
 
 ```bash
 npm test -- --coverage
 ```
 
-El reporte permite comprobar el porcentaje de código cubierto por las pruebas.
+The report allows you to check the percentage of code covered by tests.
 
 ---
 
 # GitFlow
 
-Para el desarrollo se utiliza una estrategia basada en GitFlow.
+A GitFlow-based strategy is used for development.
 
-Las ramas principales son:
+The main branches are:
 
 ```text
 main
@@ -589,32 +589,32 @@ feature/*
 
 ### `main`
 
-Contiene las versiones estables del proyecto.
+Contains the stable versions of the project.
 
 ### `develop`
 
-Contiene las funcionalidades integradas durante el desarrollo.
+Contains the features integrated during development.
 
 ### `feature/*`
 
-Cada nueva funcionalidad se desarrolla de manera independiente.
+Each new feature is developed independently.
 
-Ejemplos:
+Examples:
 
 ```text
 feature/admin
 feature/Request-Manager
 ```
 
-Una vez terminada una funcionalidad, se integra nuevamente en `develop`.
+Once a feature is completed, it is integrated back into `develop`.
 
 ---
 
 # Conventional Commits
 
-Los commits siguen una estructura descriptiva.
+Commits follow a descriptive structure.
 
-Ejemplos:
+Examples:
 
 ```bash
 git commit -m "feat(admin): implement clinic, medicine and warehouse modules"
@@ -628,45 +628,45 @@ git commit -m "fix(auth): validate JWT payload"
 git commit -m "docs: add project documentation"
 ```
 
-Los principales tipos utilizados son:
+The main types used are:
 
 ```text
-feat     Nueva funcionalidad
-fix      Corrección de error
-docs     Documentación
-test     Pruebas
-refactor Refactorización
-chore    Configuración o mantenimiento
+feat     New feature
+fix      Bug fix
+docs     Documentation
+test     Tests
+refactor Refactoring
+chore    Configuration or maintenance
 ```
 
 ---
 
-# Seguridad
+# Security
 
-La aplicación implementa diferentes mecanismos para proteger los recursos:
+The application implements different mechanisms to protect its resources:
 
-- Contraseñas almacenadas mediante hash.
-- Autenticación mediante JWT.
-- Middleware de autenticación.
-- Middleware de autorización por roles.
-- Variables sensibles mediante `.env`.
-- Validaciones antes de ejecutar operaciones.
-- Manejo centralizado de errores.
-- Separación entre lógica HTTP, negocio y persistencia.
+- Passwords stored using hashes.
+- JWT authentication.
+- Authentication middleware.
+- Role-based authorization middleware.
+- Sensitive variables stored in `.env`.
+- Validations before executing operations.
+- Centralized error handling.
+- Separation between HTTP logic, business logic, and persistence.
 
 ---
 
-# Objetivo de la arquitectura
+# Architecture Objective
 
-La arquitectura utilizada busca que cada componente tenga una responsabilidad específica.
+The architecture is designed so that each component has a specific responsibility.
 
-En lugar de tener toda la lógica en una ruta:
+Instead of placing all logic directly in a route:
 
 ```text
-Route → Base de datos
+Route → Database
 ```
 
-se utiliza:
+the application uses:
 
 ```text
 Route
@@ -684,27 +684,27 @@ Model
 Database
 ```
 
-Esto permite que el proyecto sea más:
+This makes the project:
 
-- Organizado.
-- Fácil de entender.
-- Fácil de mantener.
-- Fácil de probar.
-- Escalable.
-- Reutilizable.
-
----
-
-# Estado del proyecto
-
-Backend desarrollado como solución para la prueba de desempeño del módulo Node.js.
-
-La solución implementa una API REST utilizando una arquitectura por capas, autenticación JWT, autorización mediante roles, Sequelize como ORM y PostgreSQL como sistema de persistencia.
+- More organized.
+- Easier to understand.
+- Easier to maintain.
+- Easier to test.
+- Scalable.
+- Reusable.
 
 ---
 
-## Autor
+# Project Status
 
-**Coder:** Daniel Mendoza  
+Backend developed as a solution for the Node.js module performance assessment.
 
-Riwi - Prueba de Desempeño Node.js
+The solution implements a REST API using a layered architecture, JWT authentication, role-based authorization, Sequelize as the ORM, and PostgreSQL as the persistence system.
+
+---
+
+## Author
+
+**Coder:** Daniel Mendoza
+
+Riwi - Node.js Performance Assessment
