@@ -6,14 +6,6 @@ El sistema permite administrar clínicas, medicamentos, almacenes y solicitudes 
 
 ---
 
-## Información del proyecto
-
-**Coder:** [TU NOMBRE]  
-**Clan:** [TU CLAN]  
-**Repositorio:** [URL DEL REPOSITORIO DE GITHUB]
-
----
-
 ## Justificación
 
 RiwiMediCare Plus requiere centralizar y automatizar el proceso de solicitudes de abastecimiento realizadas por sus clínicas y centros de atención.
