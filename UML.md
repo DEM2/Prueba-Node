@@ -1,3 +1,5 @@
+```
+mermaid
 classDiagram
 
 class User {
@@ -46,3 +48,7 @@ User "1" --> "0..*" Request : realiza
 Clinic "1" --> "0..*" Request : recibe
 Medicine "1" --> "0..*" Request : solicita
 Warehouse "1" --> "0..*" Request : abastece
+
+...
+
+```
